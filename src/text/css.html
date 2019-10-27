@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .list {
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      /* background-color: red; 浏览器不支持的时候显示 */
+      background: radial-gradient(farthest-corner at 50% 50%, rgb(5, 129, 129), rgb(32, 34, 65), rgb(5, 1, 19));
+    }
+  </style>
+</head>
+
+<body>
+  <div class="swiper">
+    <van-swipe :autoplay="3000" indicator-color="white">
+      <van-swipe-item>1</van-swipe-item>
+      <van-swipe-item>2</van-swipe-item>
+      <van-swipe-item>3</van-swipe-item>
+      <van-swipe-item>4</van-swipe-item>
+    </van-swipe>
+  </div>
+</body>
+
+<script>
+  function takeLongTime() {
+    return new Promise()
+  }
+</script>
+
+</html>
