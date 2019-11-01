@@ -1,37 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>process msmj</title>
   <style>
-    .list {
-      width: 500px;
-      height: 500px;
-      border-radius: 50%;
-      /* background-color: red; 浏览器不支持的时候显示 */
-      background: radial-gradient(farthest-corner at 50% 50%, rgb(5, 129, 129), rgb(32, 34, 65), rgb(5, 1, 19));
+    h1 {
+      color: rgba(250, 100, 100, 0.7);
+      height: 40px;
+      line-height: 40px;
+      width: 400px;
+      overflow: -webkit-marquee;
+      -webkit-marquee-style: scroll;
+      -webkit-marquee-repetition: infinite;
+      -webkit-marquee-direction: up;
+      -webkit-marquee-speed: slow;
+      border: 1px #ccc solid;
     }
   </style>
 </head>
 
 <body>
-  <div class="swiper">
-    <van-swipe :autoplay="3000" indicator-color="white">
-      <van-swipe-item>1</van-swipe-item>
-      <van-swipe-item>2</van-swipe-item>
-      <van-swipe-item>3</van-swipe-item>
-      <van-swipe-item>4</van-swipe-item>
-    </van-swipe>
-  </div>
+  <h1>梨花院落溶溶月，柳絮 塘淡淡风。</h1>
 </body>
-
-<script>
-  function takeLongTime() {
-    return new Promise()
-  }
-</script>
 
 </html>

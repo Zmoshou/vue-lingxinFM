@@ -88,7 +88,8 @@ const router = new VueRouter({
       path: '/fm/category/playerpage/comment/:id',
       component: comment,
       name: "comment"
-    }, {
+    },
+     {
       path: '/fm/find/search',
       component: search,
       name: "search"

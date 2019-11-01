@@ -1,6 +1,8 @@
 const path = require('path');
 
 const webpack = require('webpack');
+
+
 // 在内存中生成html的插件
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -38,15 +40,16 @@ let config = {
             //     removeComments: true  表示删除模版中的注释
             //   }
         }),
-        new VueLoaderPlugin()
+        new VueLoaderPlugin(),
         // new ExtractTextPlugin({
         //     filename: "[name].min.css",
         //     allChunks: false
         // })
     ],
-    module: { //用于配置所有的第三方模块加载器
-        rules: [ //所有第三方模块的配配规则
-            {
+    //用于配置所有的第三方模块加载器
+    module: {
+        //所有第三方模块的配配规则
+        rules: [{
                 test: /\.vue$/,
                 use: 'vue-loader' // 处理以.vue结尾的文件
             },
@@ -58,23 +61,25 @@ let config = {
                 test: /.css$/,
                 use: [
                     'style-loader',
-                    'css-loader'
+                    'css-loader',
                 ]
             },
             {
                 test: /.(jpg|jpeg|png|gif|svg)$/,
                 use: 'url-loader?limit=1024&name=[name]-[hash:8].[ext]',
-                // options: {
-                //     name: '[name]-[hash:5].[ext]', //图片格式和大小
-                //     limit: 1024 //小于这个值图片会被转成base64 大于在这个值不会转
-                // }
+                // use: [
+                //     options: {
+                //         name: '[name]-[hash:8].[ext]', //图片格式和大小
+                //         limit: 1024 //小于这个值图片会被转成base64 大于在这个值不会转
+                //     }
+                // ]
             },
             {
                 test: /.less$/,
                 use: [
                     'style-loader',
                     'css-loader',
-                    'less-loader'
+                    'less-loader',
                 ]
             },
             {
@@ -82,7 +87,7 @@ let config = {
                 use: [
                     'style-loader',
                     'css-loader',
-                    'sass-loader'
+                    'sass-loader',
                 ]
             },
             {
@@ -99,7 +104,7 @@ let config = {
             },
             {
                 test: /\.js$/,
-                loader: 'babel-loader',
+                loader: 'babel-loader', //讲es 6，7，8，9...等转化成es5
                 exclude: /node_modules/ //排除掉node_modules中的js包
             }
         ]

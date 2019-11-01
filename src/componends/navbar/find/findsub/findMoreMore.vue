@@ -47,7 +47,7 @@ export default {
   name:"findMoreMore",
   data() {
     return {
-      limit: 8,
+      limit: 10,
       speakerList: [],
       speakerFirstRadioList: [],
       loading: false,
@@ -104,11 +104,9 @@ export default {
 <style lang="scss" scoped>
 .findMoreMore-container {
   padding: 2.2rem 0;
-  position: absolute;
+  position: relative;
   background-color: #fff;
-  top: 0;
-  left: 0;
-  width: 100%;
+  // width: 100%;
   height: 100%;
   z-index: 15;
   // .findMoreMore-box {

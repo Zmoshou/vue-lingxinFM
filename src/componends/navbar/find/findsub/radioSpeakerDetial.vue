@@ -1,17 +1,21 @@
 <template>
   <div class="detial-container">
-    <div class="detial-header">
-      <span class="icon iconfont icon-icon-test59" @click="back"></span>
+    <div class="topBox">
+      <span class="iconback iconfont icon-icon-test59" @click="back"></span>
+      <div class="toptitle">心理FM</div>
+      <span class="iconshare iconfont icon-icon-test14"></span>
+    </div>
+    <div class="detial-header" ref="detialH">
       <div class="detial-info">
         <div class="photo">
-          <img :src="getSpeakerInfo.cover" />
+          <img :src="speakerInfo.cover" />
         </div>
-        <h3 class="p_name">{{ getSpeakerInfo.title }}</h3>
+        <h3 class="p_name">{{ speakerInfo.title }}</h3>
         <p class="listen_info">
           收听
-          <span>{{ getSpeakerInfo.viewnum }}</span>
+          <span>{{ speakerInfo.viewnum }}</span>
           关注
-          <span>{{ getSpeakerInfo.favnum }}</span>
+          <span>{{ speakerInfo.favnum }}</span>
         </p>
         <div>
           <em class="circle"></em>
@@ -23,37 +27,46 @@
           <span class="letter iconfont icon-goutong"></span>
         </div>
       </div>
-      <span class="icon iconfont icon-icon-test14"></span>
     </div>
-    <div class="list_box">
-      <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-        <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-          <ul>
-            <li
-              class="item"
-              v-for="(item, index) in speakRadiolist"
-              :key="index"
-              @click="toPlayerPage(item.id)"
-            >
-              <div class="cover_box">
-                <img :src="item.cover" alt />
-              </div>
-              <div class="content_box">
-                <p class="title">{{ item.title }}</p>
-                <p class="u_name">
-                  {{ item.speak }}
-                  <span class="listen_num iconfont icon-yixianshi-"></span>
-                  <span>{{ item.viewnum }}</span>
-                </p>
-              </div>
-              <div class="control_box">
-                <van-icon name="ellipsis" class="control_box_icon" />
-              </div>
-            </li>
-          </ul>
-        </van-list>
-      </van-pull-refresh>
-    </div>
+    <van-sticky :offset-top="30" :z-index="10">
+      <div class="operation">
+        <div>
+          <span class="palyallicon iconfont icon-icon-test19"></span>
+          <span class="paly_all">播放全部</span>
+        </div>
+        <span class="allRadio">(共{{ speakerInfo.fmnum }}首)</span>
+        <div class="duoxuan" @click.stop="selectMore">
+          <span class="duoxuan_icon iconfont icon-icon-test39"></span>多选
+        </div>
+      </div>
+    </van-sticky>
+    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+      <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+        <ul class="list_ul">
+          <li
+            class="item"
+            v-for="(item, index) in speakRadiolist"
+            :key="index"
+            @click="toPlayerPage(item.id)"
+          >
+            <div class="cover_box">
+              <img :src="item.cover" alt />
+            </div>
+            <div class="content_box">
+              <p class="title">{{ item.title }}</p>
+              <p class="u_name">
+                {{ item.speak }}
+                <span class="listen_num iconfont icon-yixianshi-"></span>
+                <span>{{ item.viewnum }}</span>
+              </p>
+            </div>
+            <div class="control_box">
+              <van-icon name="ellipsis" class="control_box_icon" />
+            </div>
+          </li>
+        </ul>
+      </van-list>
+    </van-pull-refresh>
   </div>
 </template>
 
@@ -68,7 +81,7 @@ export default {
       isLoading: false,
       loading: false,
       finished: false,
-      limit: 5,
+      limit: 10,
       offset: 0
     };
   },
@@ -76,6 +89,11 @@ export default {
     this.getSpeakerInfo(this.id);
   },
   methods: {
+    selectMore() {
+      console.dir(this.$refs.detialH);
+
+      console.log(123);
+    },
     // 获取电台主持人个人信息
     getSpeakerInfo(id) {
       this.$axios
@@ -87,7 +105,7 @@ export default {
         })
         .then(res => {
           if (res.data.code === 0) {
-            this.getSpeakerInfo = res.data.data;
+            this.speakerInfo = res.data.data;
           }
         });
     },
@@ -109,9 +127,7 @@ export default {
             this.speakRadiolist = [...this.speakRadiolist, ...Data];
             this.offset = this.offset + this.limit;
             // 加载状态结束
-
             this.loading = false;
-
             // 数据全部加载完成
             if (Data.length < this.limit) {
               this.finished = true;
@@ -124,7 +140,6 @@ export default {
     onLoad() {
       // 异步更新数据
       setTimeout(() => {
-        // 异步更新数据
         this.getspeakRadiolist(this.id);
       });
     },
@@ -139,10 +154,9 @@ export default {
       }, 500);
     },
     toPlayerPage(id) {
-      this.$router.push({
-        name: "playerPage",
-        params: { id }
-      });
+      this.$store.commit("setFullScreen", true);
+      this.$store.commit("setMediaUrlId", id);
+      this.$store.commit("setPlayerList", this.speakRadiolist);
     },
     back() {
       // this.$router.push("/find");
@@ -152,18 +166,48 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.list_box {
-  height: 60%;
-  overflow: auto;
-}
 .detial-container {
   width: 100%;
   height: 100%;
-  // background-color: #666;
-  position: absolute;
-  z-index: 15;
-  top: 0;
-  left: 0;
+  // z-index: 15;
+  .topBox {
+    z-index: 10;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 1.5rem;
+    background: linear-gradient(
+      to right,
+      rgb(77, 68, 68),
+      rgb(29, 30, 31),
+      rgb(77, 68, 68)
+    );
+    .toptitle {
+      text-align: center;
+      position: absolute;
+      font-size: 0.65rem;
+      color: #fff;
+      width: 4rem;
+      top: 30%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .iconback {
+      position: absolute;
+      top: 20%;
+      left: 2%;
+      color: #fff;
+      font-size: 1rem;
+    }
+    .iconshare {
+      position: absolute;
+      top: 20%;
+      right: 2%;
+      color: #fff;
+      font-size: 1rem;
+    }
+  }
   .detial-header {
     width: 100%;
     height: 10rem;
@@ -178,14 +222,10 @@ export default {
     padding: 0 0.625rem;
     display: flex;
     justify-content: space-between;
-    .icon {
-      margin-top: 0.75rem;
-      color: #fff;
-      font-size: 1rem;
-    }
     .detial-info {
       height: 100%;
       width: 88%;
+      margin: 0 auto;
       text-align: center;
       .photo {
         margin: 1.5rem auto 0;
@@ -254,10 +294,43 @@ export default {
       }
     }
   }
+  .operation {
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+    background-color: #fff;
+    height: 1.5rem;
+    box-sizing: border-box;
+    padding: 0 0.325rem;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    .palyallicon {
+      margin-right: 0.25rem;
+      color: #fa7963;
+      font-size: 0.7rem;
+    }
+    .paly_all {
+      font-size: 0.6rem;
+      font-weight: 650;
+    }
+    .allRadio {
+      margin-left: 0.325rem;
+      font-size: 0.35rem;
+      color: #b1b5b8;
+    }
+    .duoxuan {
+      position: absolute;
+      right: 1rem;
+      color: #000;
+      font-size: 0.5rem;
+      .duoxuan_icon {
+        margin-right: 0.2rem;
+        color: #fa7963;
+        font-size: 0.5rem;
+      }
+    }
+  }
 
-  // .mui-table-view {
-  //   margin-bottom: 2.2rem;
-  // }
   .van-list {
     padding-bottom: 2.2rem;
   }
@@ -288,6 +361,9 @@ export default {
       margin-left: 0;
     }
   }
+}
+.list_ul {
+  overflow: auto;
 }
 .item {
   overflow: hidden;

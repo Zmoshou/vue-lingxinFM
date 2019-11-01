@@ -83,7 +83,7 @@ export default {
     .search_icon_box {
       line-height: 1.5rem;
       color: #fa7963;
-      font-size: 0.25rem;
+      font-size: 0.3rem;
       .search_icon {
         font-size: 0.25rem;
       }
@@ -93,7 +93,7 @@ export default {
       .words {
         display: inline-block;
         line-height: 1rem;
-        font-size: 0.325rem;
+        font-size: 0.35rem;
         padding: 0 0.5rem;
         background-color: #f7f7f7;
         color: #818181;

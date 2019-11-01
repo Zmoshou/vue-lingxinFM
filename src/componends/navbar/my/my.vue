@@ -148,7 +148,7 @@ export default {};
       font-size: 0.75rem;
       p {
         color: #000;
-        font-size: 0.7rem;
+        font-size: 0.6rem;
         span {
           margin-right: 0.3125rem;
           font-size: 0.7rem;

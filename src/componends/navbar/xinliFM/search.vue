@@ -50,6 +50,7 @@ export default {
   methods: {
     search() {
       // 点击搜索图标执行的方法
+      console.log(this.Word);
       if (this.Word.trim() == "") {
         return Toast({
           message: "搜索内容不可为空",
@@ -59,8 +60,18 @@ export default {
       this.$store.commit("addHstoryWords", this.Word); //使用vuex 添加搜索记录的词
       this.show = false;
 
-      //这个功能不想做啦！！
-      // console.log(this.$refs);
+      //搜索词没删完时仍然可以搜索
+      //2019.10.22这个功能不想做啦！！
+      //2019.10.29这个功能做好啦！
+      this.$nextTick(() => {
+        console.log(this.$refs.result);
+        if (this.Word != "") {
+          this.$refs.result.searchResultList = [];
+          this.$refs.result.offset = 0;
+          this.$refs.result.rows = 10;
+          this.$refs.result.onLoad();
+        }
+      });
       // if (this.show == false) {
       //   console.log(111);
       //   .result.searchResultList = [];

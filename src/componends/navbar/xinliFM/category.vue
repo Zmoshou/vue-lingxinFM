@@ -70,6 +70,7 @@ export default {
 <style lang="scss" scoped>
 .category-contaniner {
   padding: 2.2rem 0;
+  position: relative;
   height: 100%;
   overflow: hidden;
   header {

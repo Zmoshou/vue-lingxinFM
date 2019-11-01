@@ -163,11 +163,10 @@ export default {
         params: { id }
       });
     },
-    toPlayerPage(id) {
-      this.$router.push({
-        name: "playerPage",
-        params: { id }
-      });
+    toPlayerPage(id) {      
+      this.$store.commit("setFullScreen", true);
+      this.$store.commit("setMediaUrlId", id);
+      this.$store.commit("setPlayerList", this.newSelectList);
     },
     toFindMore() {
       this.$router.push({
@@ -317,7 +316,7 @@ export default {
       font-size: 0.5rem;
       .changeicon {
         transition: all 1.5s;
-        font-size: 0.3rem;
+        font-size: 0.5rem;
       }
       .change_text {
         margin-left: 0.2rem;

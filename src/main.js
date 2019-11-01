@@ -37,6 +37,8 @@ import app from './App.vue'
 import cssinit from './css/reset.css'; //初始化样式
 import rem from './css/common.css'; // 媒体查询适配
 import alifontscc from './lib/ali-font-icon/iconfont.css' //阿里字体
+import '../postcss.config.js'
+import './js/rem.js';
 
 // 路由文件加载
 import router from './router.js'

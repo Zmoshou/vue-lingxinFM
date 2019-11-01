@@ -35,7 +35,7 @@ export default {
       loading: false,
       finished: false,
       isLoading: false,
-      limit: 8,
+      limit: 10,
       offset: 0
     };
   },
@@ -59,7 +59,7 @@ export default {
             // 加载状态结束
             this.loading = false;
             // 数据全部加载完成
-            if (Data.length > this.limit) {
+            if (Data.length < this.limit) {
               this.finished = true;
             }
           } else {
@@ -82,10 +82,9 @@ export default {
       }, 500);
     },
     toPlayerPage(id) {
-      this.$router.push({
-        name: "playerPage",
-        params: { id }
-      });
+      this.$store.commit("setFullScreen", true);
+      this.$store.commit("setMediaUrlId", id);
+      this.$store.commit("setPlayerList", this.categoryListContent);
     }
   }
 };
@@ -125,7 +124,7 @@ export default {
       }
       .p_name {
         margin-top: 0.5rem;
-        font-size: 0.25rem;
+        font-size: 0.325rem;
         color: #b1b5b8;
         font-weight: normal;
       }

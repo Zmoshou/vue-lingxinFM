@@ -36,7 +36,7 @@ export default {
     position: relative;
     .title {
       text-align: center;
-      font-size: 0.875rem;
+      font-size: 0.8rem;
       line-height: 1.3125rem;
       font-weight: 700;
       .icon-liuhang {

@@ -26,9 +26,11 @@ export default {
   },
   methods: {
     goHomePage() {
-        setTimeout(() => {
-          this.$router.push("/fm");
-        }, 3000);
+      this.$store.commit("setFooterShow", false);
+      setTimeout(() => {
+        this.$router.push("/fm");
+        this.$store.commit("setFooterShow", true);
+      }, 3000);
     }
   }
 };
@@ -36,6 +38,7 @@ export default {
 
 <style lang="scss" scoped>
 .appCover-container {
+  z-index: 99;
   position: absolute;
   font-size: 1.5rem;
   height: 100%;
@@ -59,15 +62,15 @@ export default {
     line-height: 1.1;
     background: url("../../static/img/water.png");
     -webkit-background-clip: text;
-    background-position: 0 3rem;
+    background-position: 0 18%;
     animation: water 12s infinite;
   }
   @keyframes water {
     from {
-      background-position: left 0 top 3rem;
+      background-position: left 0 top 18%;
     }
     to {
-      background-position: left 800px top 3rem;
+      background-position: left 800px top 18%;
     }
   }
 

@@ -76,10 +76,9 @@ export default {
       });
     },
     toPlayerPage(id) {
-      this.$router.push({
-        name: "playerPage",
-        params: { id }
-      });
+      this.$store.commit("setFullScreen", true);
+      this.$store.commit("setMediaUrlId", id);
+      this.$store.commit("setPlayerList", this.searchResultList);
     }
   },
   props: {

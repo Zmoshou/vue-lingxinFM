@@ -2,7 +2,7 @@
   <div class="comment-container">
     <header>
       <span class="set-box">
-        <a href="#" class="iconfont icon-jiantou-px-" @click="toPlayerPage(id)"></a>
+        <a href="#" class="iconfont icon-jiantou-px-" @click="toPlayerPage"></a>
       </span>
       <div class="nvabar">评论({{ total}})</div>
       <span class="serch-box"></span>
@@ -294,11 +294,8 @@ export default {
         this.getCommentList();
       }, 500);
     },
-    toPlayerPage(id) {
-      this.$router.push({
-        name: "playerPage",
-        params: { id }
-      });
+    toPlayerPage() {
+      this.$router.go(-1);
     }
   }
 };
@@ -306,15 +303,22 @@ export default {
 
 <style lang="scss" scoped>
 .comment-container {
+  z-index: 105;
+  background-color: #fff;
   height: 100%;
   padding: 2.2rem 0;
-  position: relative;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: auto;
+  box-sizing: border-box;
   header {
     position: fixed;
     left: 0;
     height: 2.2rem;
     width: 100%;
-
     background-color: #fff;
     top: 0;
     display: flex;
@@ -545,7 +549,7 @@ export default {
           line-height: 1.1;
           padding: 0.2rem 0.2rem;
           max-width: 80%;
-          font-size: 0.25rem;
+          font-size: 0.325rem;
           border-left: 2px solid #ccc;
           span {
             color: rgb(105, 107, 216);
