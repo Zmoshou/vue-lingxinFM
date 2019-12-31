@@ -23,31 +23,41 @@
           @touchmove="move($event)"
           @touchend="end($event)"
           class="swiper_item"
-        >1</li>
+        >
+          <div class="divclass">1</div>
+        </li>
         <li
           @touchstart="start($event)"
           @touchmove="move($event)"
           @touchend="end($event)"
           class="swiper_item"
-        >2</li>
+        >
+          <div class="divclass">2</div>
+        </li>
         <li
           @touchstart="start($event)"
           @touchmove="move($event)"
           @touchend="end($event)"
           class="swiper_item"
-        >3</li>
+        >
+          <div class="divclass">3</div>
+        </li>
         <li
           @touchstart="start($event)"
           @touchmove="move($event)"
           @touchend="end($event)"
           class="swiper_item"
-        >4</li>
+        >
+          <div class="divclass">4</div>
+        </li>
         <li
           @touchstart="start($event)"
           @touchmove="move($event)"
           @touchend="end($event)"
           class="swiper_item"
-        >5</li>
+        >
+          <div class="divclass">5</div>
+        </li>
       </ul>
     </div>
   </div>
@@ -160,15 +170,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.divclass {
+  margin: 0.5rem;
+  background-color: skyblue;
+  height: 300px;
+}
+
 .swiper-container {
   height: 100%;
   .tabbar {
     position: relative;
     width: 100%;
-    height: 35px;
+    height: 40px;
     display: flex;
     justify-content: space-between;
-    // justify-content: start;
+    // justify-content: space-around;
     align-items: center;
     .select_color {
       color: red;

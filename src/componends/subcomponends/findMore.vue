@@ -100,7 +100,7 @@ export default {
             font-size: 0.5rem;
           }
           .describe {
-            font-size: 0.375rem;
+            font-size: 0.4rem;
             color: #666;
           }
         }

@@ -92,9 +92,9 @@ export default {
     .search_icon_box {
       line-height: 1.5rem;
       color: #fa7963;
-      font-size: 0.3rem;
+      font-size: 0.4rem;
       .search_icon {
-        font-size: 0.25rem;
+        font-size: 0.4rem;
       }
     }
     .hot_word {
@@ -118,7 +118,7 @@ export default {
       display: flex;
       color: #818181;
       justify-content: space-between;
-      font-size: 0.25rem;
+      font-size: 0.4rem;
       .delete {
         color: #818181;
         width: 0.8rem;
@@ -132,12 +132,12 @@ export default {
       align-items: center;
       border-bottom: 1px solid #f7f7f7;
       .tmieicon {
-        font-size: 0.35rem;
+        font-size: 0.4rem;
         color: #818181;
       }
       .word {
         font-size: 0.5rem;
-        margin-left: 0.35rem;
+        margin-left: 0.4rem;
         width: 88%;
       }
       .remove {

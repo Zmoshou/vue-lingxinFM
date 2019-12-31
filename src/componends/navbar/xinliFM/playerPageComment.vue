@@ -2,7 +2,7 @@
   <div class="comment-container" ref="commentcontainer">
     <header>
       <span class="set-box">
-        <a href="#" class="iconfont icon-jiantou-px-" @click="back"></a>
+        <a href="#" class="iconfont icon-jiantou-px-" @click.prevent="back"></a>
       </span>
       <div class="nvabar">评论({{ total}})</div>
       <span class="serch-box"></span>
@@ -513,7 +513,7 @@ export default {
             margin-bottom: 0.35rem;
           }
           .time {
-            font-size: 0.35rem;
+            font-size: 0.4rem;
             color: #ccc;
           }
         }

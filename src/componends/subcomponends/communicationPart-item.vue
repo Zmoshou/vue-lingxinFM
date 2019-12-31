@@ -153,7 +153,7 @@ export default {
         }
       }
       .time {
-        font-size: 0.35rem;
+        font-size: 0.425rem;
         color: #999;
         span {
           margin-right: 0.25rem;
@@ -185,17 +185,18 @@ export default {
           text-overflow: ellipsis;
           margin-bottom: 0.25rem;
         }
-        // .comment_num_box {
-        //   height: 0.5rem;
-        //   line-height: 0.5rem;
-        // }
+        .comment_num_box {
+          display: flex;
+          align-items: center;
+        }
         .comment_icon {
-          font-size: 0.375rem;
+          font-size: 0.425rem;
           color: #444;
         }
         .comment_num {
+          margin-left: 0.3rem;
           color: #444;
-          font-size: 0.35rem;
+          font-size: 0.425rem;
         }
       }
       .item_body_right {

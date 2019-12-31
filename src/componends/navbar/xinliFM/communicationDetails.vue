@@ -317,7 +317,7 @@ export default {
               font-size: 0.5rem;
             }
             .data {
-              font-size: 0.35rem;
+              font-size: 0.4rem;
             }
           }
         }
@@ -374,7 +374,7 @@ export default {
             position: absolute;
             top: 5%;
             right: 2%;
-            font-size: 0.35rem;
+            font-size: 0.4rem;
             color: #444;
           }
           .user_photo {
@@ -402,7 +402,7 @@ export default {
               margin-bottom: 0.35rem;
             }
             .time {
-              font-size: 0.35rem;
+              font-size: 0.4rem;
               color: #ccc;
             }
           }

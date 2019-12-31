@@ -2,7 +2,7 @@
   <div class="header-container">
     <header>
       <span class="set-box">
-        <a href="#" class="iconfont icon-shezhi2"></a>
+        <a href="#" @click.prevent="toTest" class="iconfont icon-shezhi2"></a>
       </span>
       <div class="nvabar">
         <span :class="['my',{'active':select == 0}]" @click="toActive(0)">我的</span>
@@ -32,6 +32,11 @@ export default {
     toSearch() {
       this.$router.push({
         name: "search"
+      });
+    },
+    toTest() {
+      this.$router.push({
+        name: "test"
       });
     }
   }

@@ -176,7 +176,7 @@ export default {
     }
     .list_num {
       margin: 0 0.325rem;
-      font-size: 0.325rem;
+      font-size: 0.4rem;
       color: #b1b5b8;
     }
     .paly_order {
@@ -235,7 +235,7 @@ export default {
       }
       .i_speak {
         width: 20%;
-        font-size: 0.325rem;
+        font-size: 0.4rem;
         color: #b1b5b8;
         overflow: hidden;
         white-space: nowrap;

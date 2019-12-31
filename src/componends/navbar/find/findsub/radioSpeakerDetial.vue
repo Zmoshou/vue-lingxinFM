@@ -403,7 +403,7 @@ export default {
     }
     .allRadio {
       margin-left: 0.325rem;
-      font-size: 0.35rem;
+      font-size: 0.4rem;
       color: #b1b5b8;
     }
     .duoxuan {
@@ -481,7 +481,7 @@ export default {
     }
     .u_name {
       margin-top: 0.5rem;
-      font-size: 0.35rem;
+      font-size: 0.4rem;
       color: #b1b5b8;
       font-weight: normal;
     }

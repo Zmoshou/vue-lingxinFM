@@ -2,7 +2,7 @@
   <div class="category-contaniner">
     <header>
       <span class="set-box">
-        <a href="javascript:;" class="iconfont icon-jiantou-px-" @click="back" style="width:2rem"></a>
+        <a href="javascript:;" class="iconfont icon-jiantou-px-" @click.prevent="back" style="width:2rem"></a>
       </span>
       <div class="nvabar">分类话题</div>
       <span class="serch-box"></span>
