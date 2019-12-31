@@ -1,35 +1,43 @@
 <template>
   <div class="detial-container">
-    <div class="topBox">
+    <div :class="['topBox',{'tboxBg':topBoxShow}]" ref="topBox">
       <span class="iconback iconfont icon-icon-test59" @click="back"></span>
-      <div class="toptitle">心理FM</div>
+      <transition name="top-box">
+        <div class="toptitle" v-show="topBoxShow">{{ speakerInfo.title }}</div>
+      </transition>
       <span class="iconshare iconfont icon-icon-test14"></span>
     </div>
     <div class="detial-header" ref="detialH">
       <div class="detial-info">
-        <div class="photo">
-          <img :src="speakerInfo.cover" />
-        </div>
-        <h3 class="p_name">{{ speakerInfo.title }}</h3>
-        <p class="listen_info">
-          收听
-          <span>{{ speakerInfo.viewnum }}</span>
-          关注
-          <span>{{ speakerInfo.favnum }}</span>
-        </p>
-        <div>
-          <em class="circle"></em>
-          <em class="circle"></em>
-        </div>
-        <div class="focus">
-          <span class="guanzhu">已关注</span>
-          <i>|</i>
-          <span class="letter iconfont icon-goutong"></span>
-        </div>
+        <van-swipe :loop="false" indicator-color="#f4f4f4">
+          <van-swipe-item>
+            <div class="photo">
+              <img :src="speakerInfo.cover" />
+            </div>
+            <h3 class="p_name">{{ speakerInfo.title }}</h3>
+            <p class="listen_info">
+              收听
+              <span>{{ speakerInfo.viewnum }}</span>
+              关注
+              <span>{{ speakerInfo.favnum }}</span>
+            </p>
+          </van-swipe-item>
+          <van-swipe-item>
+            <div class="info_content">{{ speakerInfo.content }}</div>
+          </van-swipe-item>
+        </van-swipe>
+      </div>
+      <div class="focus" v-if="Guanzhu" @click="getDoGuanzhu">
+        <span class="guanzhu">已关注</span>
+        <i>|</i>
+        <span class="letter iconfont icon-goutong"></span>
+      </div>
+      <div class="focus" v-else @click="getDoGuanzhu">
+        <span class="guanzhu2">关注</span>
       </div>
     </div>
-    <van-sticky :offset-top="30" :z-index="10">
-      <div class="operation">
+    <van-sticky :offset-top="top" :z-index="10" @scroll="scroll()">
+      <div class="operation" ref="operation">
         <div>
           <span class="palyallicon iconfont icon-icon-test19"></span>
           <span class="paly_all">播放全部</span>
@@ -61,7 +69,7 @@
               </p>
             </div>
             <div class="control_box">
-              <van-icon name="ellipsis" class="control_box_icon" />
+              <van-icon name="ellipsis" class="control_box_icon" @click.stop="radioOperate(item)" />
             </div>
           </li>
         </ul>
@@ -75,6 +83,10 @@ import { Toast } from "vant";
 export default {
   data() {
     return {
+      toRoute: "home", //用来判断从哪个页面进来的参数
+      topBoxShow: false, //控制顶部显示与隐藏
+      Guanzhu: false, //是否关注电台
+      top: 0, //控制距离粘性定位的顶部距离
       id: this.$route.params.id,
       speakRadiolist: [],
       speakerInfo: {},
@@ -87,13 +99,9 @@ export default {
   },
   created() {
     this.getSpeakerInfo(this.id);
+    this.getRadioOn();
   },
   methods: {
-    selectMore() {
-      console.dir(this.$refs.detialH);
-
-      console.log(123);
-    },
     // 获取电台主持人个人信息
     getSpeakerInfo(id) {
       this.$axios
@@ -137,11 +145,42 @@ export default {
           }
         });
     },
+    getRadioOn() {
+      this.$axios
+        .get("fm/diantai-check-guanzhu.json", {
+          params: {
+            diantai_id: this.id,
+            key: this.$store.state.key,
+            token: this.$store.state.token
+          }
+        })
+        .then(res => {
+          if (res.data.code === 0) {
+            this.Guanzhu = res.data.data;
+          }
+        });
+    },
+    getDoGuanzhu() {
+      this.$axios
+        .get("fm/diantai-toggle-guanzhu.json", {
+          params: {
+            diantai_id: this.id,
+            key: this.$store.state.key,
+            token: this.$store.state.token
+          }
+        })
+        .then(res => {
+          if (res.data.code === 0) {
+            this.Guanzhu = res.data.data;
+            console.log(res.data.data);
+          }
+        });
+    },
     onLoad() {
       // 异步更新数据
       setTimeout(() => {
         this.getspeakRadiolist(this.id);
-      });
+      }, 800);
     },
     onRefresh() {
       setTimeout(() => {
@@ -153,23 +192,60 @@ export default {
         this.isLoading = false;
       }, 500);
     },
+    scroll() {
+      this.top = this.$refs.topBox.offsetHeight;
+      if (this.$refs.operation.offsetTop == 0) {
+        this.topBoxShow = true;
+      } else {
+        this.topBoxShow = false;
+      }
+    },
+    selectMore() {
+      console.dir(this.$refs.detialH);
+
+      console.log(123);
+    },
     toPlayerPage(id) {
       this.$store.commit("setFullScreen", true);
       this.$store.commit("setMediaUrlId", id);
-      this.$store.commit("setPlayerList", this.speakRadiolist);
+      let newlist = JSON.parse(JSON.stringify(this.speakRadiolist)); //利用json转换深拷贝
+      this.$store.commit("setPlayerList", newlist);
+    },
+    radioOperate(radio) {
+      this.$store.commit("setRadioPopupShow", true);
+      this.$store.commit("setRadioObj", radio);
     },
     back() {
-      // this.$router.push("/find");
+      this.$router.go(-1);
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.top-box-enter-active,
+.top-box-leave-active {
+  transition: opacity 0.5s;
+}
+.top-box-enter,
+.top-box-leave-to {
+  opacity: 0;
+}
 .detial-container {
+  position: relative;
   width: 100%;
   height: 100%;
   // z-index: 15;
+  .tboxBg {
+    background: linear-gradient(
+      to right,
+      rgb(29, 30, 31),
+      rgb(77, 68, 68),
+      rgb(5, 129, 129),
+      rgb(77, 68, 68),
+      rgb(29, 30, 31)
+    );
+  }
   .topBox {
     z-index: 10;
     position: fixed;
@@ -177,18 +253,13 @@ export default {
     top: 0;
     width: 100%;
     height: 1.5rem;
-    background: linear-gradient(
-      to right,
-      rgb(77, 68, 68),
-      rgb(29, 30, 31),
-      rgb(77, 68, 68)
-    );
+
     .toptitle {
       text-align: center;
       position: absolute;
       font-size: 0.65rem;
       color: #fff;
-      width: 4rem;
+      width: 70%;
       top: 30%;
       left: 50%;
       transform: translateX(-50%);
@@ -209,6 +280,7 @@ export default {
     }
   }
   .detial-header {
+    position: relative;
     width: 100%;
     height: 10rem;
     background-color: rgb(32, 34, 65);
@@ -220,17 +292,20 @@ export default {
     );
     box-sizing: border-box;
     padding: 0 0.625rem;
-    display: flex;
-    justify-content: space-between;
     .detial-info {
-      height: 100%;
-      width: 88%;
-      margin: 0 auto;
+      position: absolute;
+      top: 1.5rem;
+      left: 0;
+      height: 70%;
+      width: 100%;
       text-align: center;
+      .van-swipe {
+        height: 100%;
+      }
       .photo {
-        margin: 1.5rem auto 0;
-        width: 3.4375rem;
-        height: 3.4375rem;
+        margin: 0.25rem auto 0;
+        width: 3.25rem;
+        height: 3.25rem;
         img {
           width: 100%;
           border-radius: 50%;
@@ -256,41 +331,54 @@ export default {
           font-size: 0.5rem;
         }
       }
-      .circle {
-        margin: 0.5rem 0.125rem 0;
-        display: inline-block;
-        width: 0.25rem;
-        height: 0.25rem;
-        border-radius: 50%;
-        background-color: #fff;
+      .info_content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 60%;
+        line-height: 1.25;
+        word-wrap: break-word;
+        word-break: break-all;
+        overflow: hidden;
+        font-size: 0.55rem;
+        color: #f4f4f4;
       }
-      .focus {
-        margin: 0.25rem auto 0;
-        border-radius: 1.125rem;
-        width: 4.25rem;
-        height: 1rem;
+    }
+    .focus {
+      position: absolute;
+      bottom: 6%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 1.125rem;
+      width: 4.25rem;
+      height: 1rem;
+      font-size: 0.5rem;
+      color: #fff;
+      line-height: 0.7rem;
+      border: 1px solid #fff;
+      .guanzhu {
+        position: absolute;
+        top: 0.15rem;
+        left: 0.8rem;
         font-size: 0.5rem;
-        color: #fff;
-        line-height: 0.7rem;
-        border: 1px solid #fff;
-        position: relative;
-        .guanzhu {
-          position: absolute;
-          top: 0.15rem;
-          left: 0.8rem;
-          font-size: 0.5rem;
-        }
-        i {
-          position: absolute;
-          top: 0.13rem;
-          left: 2.5rem;
-        }
-        .letter {
-          position: absolute;
-          font-size: 0.8rem;
-          top: 0.2rem;
-          left: 2.8rem;
-        }
+      }
+      .guanzhu2 {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+      i {
+        position: absolute;
+        top: 0.13rem;
+        left: 2.5rem;
+      }
+      .letter {
+        position: absolute;
+        font-size: 0.8rem;
+        top: 0.2rem;
+        left: 2.8rem;
       }
     }
   }

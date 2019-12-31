@@ -15,7 +15,7 @@
           placeholder="搜索节目、主播、播单"
         />
       </div>
-      <span class="cancel">取消</span>
+      <span class="cancel" @click="goBack">取消</span>
     </header>
     <hotSearch v-if="show" @newWordChange="changeWord($event)" ref="hotWords"></hotSearch>
     <searchResult v-else :searchWord="Word" ref="result"></searchResult>
@@ -29,13 +29,14 @@ import searchResult from "../../subcomponends/searchResult.vue";
 export default {
   data() {
     return {
+      toRoute: "home",
       addclassFalg: false,
       show: true,
       Word: ""
     };
   },
   mounted() {
-    this.$refs.input.focus();
+    // this.$refs.input.focus();
   },
   watch: {
     Word: function(newVal, oleVal) {
@@ -50,38 +51,34 @@ export default {
   methods: {
     search() {
       // 点击搜索图标执行的方法
-      console.log(this.Word);
+      // console.log(this.Word);
       if (this.Word.trim() == "") {
         return Toast({
           message: "搜索内容不可为空",
           duration: 1500
         });
       }
-      this.$store.commit("addHstoryWords", this.Word); //使用vuex 添加搜索记录的词
       this.show = false;
-
+      this.$store.commit("addHstoryWords", this.Word); //使用vuex 添加搜索记录的词
       //搜索词没删完时仍然可以搜索
       //2019.10.22这个功能不想做啦！！
       //2019.10.29这个功能做好啦！
       this.$nextTick(() => {
-        console.log(this.$refs.result);
-        if (this.Word != "") {
+        if (this.Word !== "") {
           this.$refs.result.searchResultList = [];
           this.$refs.result.offset = 0;
           this.$refs.result.rows = 10;
           this.$refs.result.onLoad();
         }
       });
-      // if (this.show == false) {
-      //   console.log(111);
-      //   .result.searchResultList = [];
-      //   this.$refs.result.getSearchResult();
-      // }
     },
     changeWord(hotWord) {
       this.Word = hotWord;
       this.show = false;
       this.$store.commit("addHstoryWords", this.Word);
+    },
+    goBack() {
+      this.$router.go(-1);
     }
   },
   components: {
@@ -128,11 +125,11 @@ export default {
         color: #000;
         line-height: 1rem;
         width: 90%;
-        font-size: 0.5rem;
+        font-size: 0.55rem;
         caret-color: #fa7963;
         &::-webkit-input-placeholder {
           color: #cecece;
-          font-size: 0.325rem;
+          font-size: 0.45rem;
         }
       }
     }

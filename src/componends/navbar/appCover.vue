@@ -28,8 +28,8 @@ export default {
     goHomePage() {
       this.$store.commit("setFooterShow", false);
       setTimeout(() => {
-        this.$router.push("/fm");
-        this.$store.commit("setFooterShow", true);
+        this.$router.push({path: '/login', replace: true})
+        // this.$router.push("/login");
       }, 3000);
     }
   }
@@ -39,10 +39,12 @@ export default {
 <style lang="scss" scoped>
 .appCover-container {
   z-index: 99;
-  position: absolute;
+  position: relative;
+  top: 0;
+  left: 0;
   font-size: 1.5rem;
   height: 100%;
-  background: url("../../static/img/心理fm封面.jpg");
+  background: url("../../static/img/fmcover.jpg");
   background-size: 100% 100%;
   .text_box {
     position: absolute;

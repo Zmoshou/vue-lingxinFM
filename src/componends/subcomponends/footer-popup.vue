@@ -17,18 +17,20 @@
               <span class="mode_name">随机播放</span>
             </div>
             <span class="list_num">({{ playerList.length }}首)</span>
-            <span class="paly_order">正序</span>
+            <span class="paly_order" v-show="order" @click="orderList">正序</span>
+            <span class="paly_order" v-show="!order" @click="orderList">倒序</span>
           </div>
           <div class="title_right">
             <span class="iconfont icon-xiazai" @click.stop="$toast('下载好了，小老弟')"></span>
             <span class="iconfont icon-shanchu-copy-copy" @click.stop="dialogShow = true"></span>
           </div>
         </div>
-        <div class="popup_content">
+        <div class="popup_content" ref="popupContent">
           <ul>
-            <li class="item" v-for="(item, index) in playerList" :key="index">
+            <li class="item" v-for="(item, index) in playerList" :key="index" ref="item">
               <div class="item_title" @click.stop="playRadio(item.id)">
-                <div class="i_title">{{ item.title }}</div>
+                <div class="longBox" v-show="index == selectIndex"></div>
+                <div :class="['i_title',{'i_title_select':index == selectIndex}]">{{ item.title }}</div>
                 <div class="i_speak">{{ item.speak }}</div>
               </div>
               <div class="item_icon">
@@ -58,11 +60,30 @@ export default {
   data() {
     return {
       dialogShow: false,
-      popupShow: false
+      popupShow: false,
+      order: true
     };
   },
+  watch: {
+    playerList: function(newVal, oLdVal) {
+      if (newVal.length == 0) {
+        this.popupShow = false;
+        this.$store.commit("setMediaUrlId", -1);
+        this.$store.commit("setPlaying", true);
+        this.$store.commit("setFullScreen", false);
+      }
+    },
+    mediaUrlId: function(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        let idx = this.playerList.findIndex(ele => {
+          return ele.id === this.mediaUrlId;
+        });
+        this.$store.commit("setSelectIndex", idx);
+      }
+    }
+  },
   computed: {
-    ...mapGetters(["playerList", "playerMode", "mediaUrlId"])
+    ...mapGetters(["playerList", "playerMode", "mediaUrlId", "selectIndex"])
   },
   methods: {
     changePlayMode(modeNum) {
@@ -73,6 +94,12 @@ export default {
       this.$store.commit("setMediaUrlId", radioId);
     },
     removeThisRadio(index) {
+      console.log(index);
+      console.log(this.selectIndex);
+
+      if (index === this.selectIndex) {
+        this.$parent.changeRadio(this.mediaUrlId, 1);
+      }
       this.$store.commit("removeOnePlayerList", index);
     },
     removeAllRadio() {
@@ -83,12 +110,43 @@ export default {
       this.$store.commit("setMediaUrlId", -1);
       this.$store.commit("setPlaying", true);
       this.$store.commit("setFullScreen", false);
+    },
+    orderList() {
+      this.order = !this.order;
+      let order = this.playerList.reverse();
+      this.$store.commit("setPlayerList", order);
+      //重新设置高亮播放曲目
+      let lightIndex = this.$store.state.playerList.findIndex(ele => {
+        return ele.id == this.$store.state.mediaUrlId;
+      });
+      this.$store.commit("setSelectIndex", lightIndex);
+      this.scrollInit();
+    },
+    scrollInit() {
+      this.$refs.popupContent.scrollTop =
+        this.$refs.item[0].offsetHeight * (this.selectIndex - 1);
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.longBox {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: #f3482a;
+  // animation: name duration timing-function delay iteration-count direction fill-mode;
+  animation: boxShow 1.5s linear infinite alternate;
+  @keyframes boxShow {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+}
 .popup-container {
   position: relative;
   height: 100%;
@@ -148,7 +206,11 @@ export default {
 .popup_content {
   height: 76%;
   overflow-y: auto;
+  &::-webkit-scrollbar {
+    display: none; /*隐藏滚动条*/
+  }
   .item {
+    box-sizing: border-box;
     height: 1.6rem;
     display: flex;
     justify-content: space-between;
@@ -167,6 +229,9 @@ export default {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+      }
+      .i_title_select {
+        color: #f3482a;
       }
       .i_speak {
         width: 20%;

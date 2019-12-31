@@ -16,7 +16,7 @@
     <div class="search_history">
       <div class="search_record">
         <span>历史搜索记录</span>
-        <span class="delete iconfont icon-shanchu-copy-copy" @click="removeAllhistory"></span>
+        <span class="delete iconfont icon-shanchu-copy-copy" @click="dialogShow = true"></span>
       </div>
       <ul class=".search_record_words">
         <li
@@ -31,6 +31,13 @@
         </li>
       </ul>
     </div>
+    <div class="dialog_box" v-show="dialogShow">
+      <div class="dialog">
+        <div class="dialog_title">确定清空历史记录吗？</div>
+        <span class="confirm" @click="removeAllhistory">确定</span>
+        <span class="cancel" @click.stop="dialogShow = false">取消</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -38,6 +45,7 @@
 export default {
   data() {
     return {
+      dialogShow: false,
       hotWordList: [
         "睡前故事",
         "人际",
@@ -67,6 +75,7 @@ export default {
     removeAllhistory() {
       this.historyWordsList = [];
       this.$store.commit("removeAllHstoryWords");
+      this.dialogShow = false;
     },
     removeThisHistory(idx) {
       // this.historyWordsList.splice(idx, 1);
@@ -93,7 +102,7 @@ export default {
       .words {
         display: inline-block;
         line-height: 1rem;
-        font-size: 0.35rem;
+        font-size: 0.45rem;
         padding: 0 0.5rem;
         background-color: #f7f7f7;
         color: #818181;
@@ -138,6 +147,47 @@ export default {
         color: #ccc;
         text-align: right;
       }
+    }
+  }
+}
+//确认框样式-----
+.dialog_box {
+  position: fixed;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 3000;
+  .dialog {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 14%;
+    border-radius: 5px;
+    background-color: #fff;
+    .dialog_title {
+      position: absolute;
+      top: 20%;
+      left: 8%;
+      font-size: 0.6rem;
+      color: #666;
+    }
+    span {
+      position: absolute;
+      font-size: 0.5rem;
+      bottom: 18%;
+      width: 12%;
+      text-align: center;
+    }
+    .confirm {
+      right: 5%;
+      color: #f3482a;
+    }
+    .cancel {
+      right: 20%;
+      color: #000;
     }
   }
 }

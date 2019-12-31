@@ -1,9 +1,7 @@
 <template>
   <div class="app-container">
     <transition :name="direction" mode="out-in">
-      <keep-alive include="findMoreMore">
-        <router-view class="appView"></router-view>
-      </keep-alive>
+      <router-view class="appView"></router-view>
     </transition>
     <footerplayer></footerplayer>
   </div>
@@ -40,37 +38,37 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-body html {
-  height: 100%;
-}
+// .app-container {
 
+// }
 .appView {
   &::-webkit-scrollbar {
     display: none;
     width: 0;
   }
-  height: 100%;
-  width: 100%;
-  transition: all 0.5s ease-out;
+  transition: all 0.35s ease-out;
 }
 .slide-left-enter {
-  transform: translate(0%, 0);
+  // transform: translate(0%, 0);
+  transform: translate(50%, 0);
 }
 .slide-left-leave-active {
   transform: translate(-100%, 0);
+  // transform: translate(0%, 0);
 }
 .slide-right-enter {
-  transform: translate(-0%, 0);
+  // transform: translate(0%, 0);
+  transform: translate(-50%, 0);
 }
 .slide-right-leave-active {
-  // transform: translate(100%, 0);
   transform: translate(100%, 0);
+  // transform: translate(100%, 0);
 }
 .comment-enter {
   transform: translate(100%, 0);
 }
 .app-container {
   height: 100%;
-  // overflow: hidden;
+  overflow: auto;
 }
 </style>

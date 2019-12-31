@@ -9,6 +9,16 @@ const timeFormat = (time) => {
   return (m + ':' + s);
 }
 
+// 数字格式化
+const numFormat = (num, mode = 0) => {
+  let formatNum = '';
+  if (mode === 0) {
+    formatNum = num >= 10000 ? (num / 10000).toFixed(1) + '万' : num
+  }
+  return formatNum;
+}
+
 export {
-  timeFormat
+  timeFormat,
+  numFormat
 }

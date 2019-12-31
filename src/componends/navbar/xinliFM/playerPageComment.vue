@@ -1,14 +1,14 @@
 <template>
-  <div class="comment-container">
+  <div class="comment-container" ref="commentcontainer">
     <header>
       <span class="set-box">
-        <a href="#" class="iconfont icon-jiantou-px-" @click="toPlayerPage"></a>
+        <a href="#" class="iconfont icon-jiantou-px-" @click="back"></a>
       </span>
       <div class="nvabar">评论({{ total}})</div>
       <span class="serch-box"></span>
     </header>
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-      <div class="radio_box">
+      <div class="radio_box" ref="radiobox">
         <div class="radio_item">
           <div class="cover">
             <img :src="playerInfo.cover" />
@@ -32,13 +32,13 @@
             @click="showCommentControl($event,index)"
           >
             <div
+              :style="{'left':positionLift}"
               ref="showMessageBox"
-              :style="positionObject"
               class="show_message_box"
-              :class="{'show_message_visbile':showNum == index&&show ? true : false,'show_message_box':true}"
+              v-show="showNum == index&&show ? true : false"
             >
               <div class="show_message_choose">
-                <div @click="doReply(item.id, item.user.nickname)">回复</div>
+                <div @click.stop="doReply(item.id, item.user.nickname)">回复</div>
                 <div>复制</div>
                 <div @click="doJubao">举报</div>
               </div>
@@ -73,6 +73,7 @@
     </van-pull-refresh>
     <footer class="do_comment">
       <input
+        @focus="inputFocus"
         ref="commentInput"
         class="comment_input"
         type="text"
@@ -107,10 +108,10 @@ export default {
       //控制点赞回复显示的位置,
       commnetFlag: true, //控制发送按钮是执行回复评论还是评论
       replyId: 0, //所回复信息的用户的id
-      positionObject: {
-        top: "0",
-        left: "0"
-      }
+      //控制回复评论盒子的宽高
+      positionLift: 0,
+      positionTop:0
+    
     };
   },
   created() {
@@ -119,35 +120,31 @@ export default {
   methods: {
     //--------控制背景盒子显示和隐藏
     showCommentControl(e, index) {
+      // console.log(e);
+      
+      // console.dir(this.$refs.commentBox[index].offsetTop);
+      
       if (this.showNum == index) {
         this.show = !this.show;
       } else {
         this.show = true;
         this.showNum = index;
       }
-      //控制盒子显示的位置开始---------
-      let commentBox = this.$refs.commentBox;
-      let showMessageBox = this.$refs.showMessageBox;
-      let hArr = [];
-      commentBox.forEach(ele => {
-        hArr.push(ele.offsetHeight);
+      this.$nextTick(() => {
+        let commentBox = this.$refs.commentBox;
+        let showMessageBox = this.$refs.showMessageBox;
+        let boxLeft = e.pageX - commentBox[index].offsetLeft - 8;
+        let maxLeft =
+          commentBox[index].offsetWidth - showMessageBox[index].offsetWidth;
+        if (boxLeft < -7) {
+          boxLeft = -7;
+        } else if (boxLeft > maxLeft + 7) {
+          boxLeft = maxLeft + 7;
+        }
+        this.positionLift = boxLeft + "px";
       });
-      let minH = Math.min(...hArr);
-      let boxTop = e.pageY - commentBox[index].offsetTop - minH;
-      let boxLeft =
-        e.pageX -
-        commentBox[index].offsetLeft -
-        showMessageBox[index].offsetWidth / 2;
-      let maxLeft =
-        commentBox[index].offsetWidth - showMessageBox[index].offsetWidth;
-      if (boxLeft < -7) {
-        boxLeft = -7;
-      } else if (boxLeft > maxLeft + 7) {
-        boxLeft = maxLeft + 7;
-      }
-      this.positionObject.top = boxTop + "px";
-      this.positionObject.left = boxLeft + "px";
-    }, //控制盒子显示的位置结束-----------
+    },
+    //控制盒子显示的位置结束-----------
     //点击回复 使输入框获取焦点
     doReply(id, name) {
       this.placeholderMsg = "回复 " + name;
@@ -155,6 +152,10 @@ export default {
       commentInput.focus();
       this.replyId = id;
       this.commnetFlag = false;
+    },
+    //输入框获取焦点时 评论选中状态取消
+    inputFocus() {
+      this.show = false;
     },
     doJubao() {
       return Toast({
@@ -228,6 +229,7 @@ export default {
           }
         });
     },
+    //品论
     postComment() {
       this.$axios
         .post("fm/post-comment.json", {
@@ -281,7 +283,7 @@ export default {
       setTimeout(() => {
         // 异步更新数据
         this.getCommentList();
-      });
+      },800);
     },
     //下拉刷新
     onRefresh() {
@@ -294,7 +296,7 @@ export default {
         this.getCommentList();
       }, 500);
     },
-    toPlayerPage() {
+    back() {
       this.$router.go(-1);
     }
   }
@@ -306,13 +308,9 @@ export default {
   z-index: 105;
   background-color: #fff;
   height: 100%;
-  padding: 2.2rem 0;
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
   overflow: auto;
+  padding: 2.2rem 0;
+  position: relative;
   box-sizing: border-box;
   header {
     position: fixed;
@@ -333,7 +331,7 @@ export default {
       justify-content: center;
       align-items: center;
       font-size: 0.75rem;
-      font-weight: 680;
+      font-weight: 550;
     }
 
     .serch-box,
@@ -382,9 +380,7 @@ export default {
     margin-top: 0.625rem;
     width: 100%;
     height: 3rem;
-    // background-color: #ccc;
     margin-bottom: 0.5rem;
-    overflow: hidden;
     .cover {
       position: relative;
       float: left;
@@ -398,6 +394,7 @@ export default {
         font-size: 0.8rem;
       }
       img {
+        height: 100%;
         width: 100%;
       }
     }
@@ -434,6 +431,9 @@ export default {
   }
   .radio_box {
     padding: 0 0.325rem;
+    .van-list {
+      position: relative;
+    }
     .comment_title {
       font-size: 0.5rem;
       margin: 0.95rem 0 0.5rem;
@@ -443,23 +443,24 @@ export default {
     }
     .show_message_box {
       position: absolute;
-      visibility: hidden;
+      top: -18%;
+      right: 0%;
       z-index: 5;
       width: 7rem;
       height: 1.2rem;
       background-color: #434343;
-      border-radius: 0.2rem;
+      border-radius: 1.2rem;
       .trangle_bottom {
         //回复框下的小三角
         position: absolute;
-        bottom: -10px;
-        left: 50%;
+        bottom: -95%;
+        left: 10%;
         transform: translateX(-50%);
         width: 0;
         height: 0;
-        border-left: 0.4rem solid transparent;
+        // border-left: 0.4rem solid transparent;
         border-right: 0.4rem solid transparent;
-        border-top: 0.5rem solid #434343;
+        border-top: 1.5rem solid #434343;
       }
       .show_message_choose {
         display: flex;
@@ -482,10 +483,6 @@ export default {
       position: relative;
       // margin-top: 0.5rem;
       padding-top: 0.5rem;
-      .show_message_visbile {
-        //控制回复 复制 弹框的显示和隐藏
-        visibility: visible;
-      }
       .comment_userinfo {
         position: relative;
         height: 2rem;
@@ -549,7 +546,8 @@ export default {
           line-height: 1.1;
           padding: 0.2rem 0.2rem;
           max-width: 80%;
-          font-size: 0.325rem;
+          font-size: 0.425rem;
+          color: #666;
           border-left: 2px solid #ccc;
           span {
             color: rgb(105, 107, 216);

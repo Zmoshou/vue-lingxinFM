@@ -18,13 +18,13 @@
               <p class="p_name">
                 {{ item.speak }}
                 <span class="listen_num iconfont icon-yixianshi-"></span>
-                <span>{{ item.viewnum }}</span>
+                <span>{{ item.viewnum | numFormat }}</span>
                 <span class="iconfont icon-wodeshoucang"></span>
                 <span>{{ item.favnum }}</span>
               </p>
             </div>
             <div class="control_box">
-              <van-icon name="ellipsis" class="control_box_icon" />
+              <van-icon name="ellipsis" class="control_box_icon" @click.stop="radioOperate(item)" />
             </div>
           </li>
         </ul>
@@ -40,7 +40,7 @@ export default {
       loading: false,
       finished: false,
       offset: 0,
-      rows: 10,
+      rows: 20,
       searchResultList: [],
       newWord: ""
     };
@@ -73,12 +73,17 @@ export default {
       setTimeout(() => {
         // 异步更新数据
         this.getSearchResult();
-      });
+      }, 800);
+    },
+    radioOperate(radio) {
+      this.$store.commit("setRadioPopupShow", true);
+      this.$store.commit("setRadioObj", radio);
     },
     toPlayerPage(id) {
       this.$store.commit("setFullScreen", true);
       this.$store.commit("setMediaUrlId", id);
-      this.$store.commit("setPlayerList", this.searchResultList);
+      let newlist = JSON.parse(JSON.stringify(this.searchResultList)); //利用json转换深拷贝
+      this.$store.commit("setPlayerList", newlist);
     }
   },
   props: {
@@ -127,8 +132,9 @@ export default {
         width: 100%;
         word-wrap: break-word;
         word-break: break-all;
-        line-height: 1.1;
-        overflow: hidden;
+        line-height: 1.2;
+        overflow-x: hidden;
+        // overflow: hidden;
         font-size: 0.55rem;
       }
       .p_name {

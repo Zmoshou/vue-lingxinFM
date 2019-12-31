@@ -49,26 +49,34 @@ export default {
     }
   },
   mounted() {
+    this.swiperList = [
+      {
+        cover: "http://image.xinli001.com/20150322/194353ac3111b7cf31c668.jpg"
+      },
+      {
+        cover: "http://image.xinli001.com/20141231/1555041443c25ce0d98dba.jpg"
+      },
+      {
+        cover: "http://image.xinli001.com/20150612/1828341febfbdc67a8049d.jpg"
+      },
+      {
+        cover:
+          "https://ossimg.xinli001.com/20190729/853d9d224f48d10f9f50824ecfe5dc0a.jpg"
+      },
+      {
+        cover:
+          "http://image.xinli001.com/20150831/15315204fce39214a2b368.jpg"
+      }
+    ];
     // current swiper instance
     // 然后你就可以使用当前上下文内的swiper对象去做你想做的事了
     // console.log("this is current swiper instance object", this.swiper);
     // this.swiper.slideTo(1, 1000, false);
   },
   created() {
-    this.getSwiperList();
+    // this.getSwiperList();
   },
   methods: {
-    getSwiperList() {
-      this.$axios
-        .get(
-          "http://bapi.xinli001.com/fm2/hot_tag_list.json/?flag=4&offset=0&rows=10&key=046b6a2a43dc6ff6e770255f57328f89"
-        )
-        .then(res => {
-          if (res.data.code === 0) {
-            this.swiperList = res.data.data;
-          }
-        });
-    }
   }
 };
 </script>

@@ -17,7 +17,7 @@
               <p class="p_name">{{ item.speak }}</p>
             </div>
             <div class="control_box">
-              <van-icon name="ellipsis" class="control_box_icon" />
+              <van-icon name="ellipsis" class="control_box_icon" @click.stop="radioOperate(item)" />
             </div>
           </li>
         </ul>
@@ -35,7 +35,7 @@ export default {
       loading: false,
       finished: false,
       isLoading: false,
-      limit: 10,
+      limit: 20,
       offset: 0
     };
   },
@@ -72,19 +72,24 @@ export default {
       setTimeout(() => {
         // 异步更新数据
         this.getCategoryListContent();
-      });
+      },800);
     },
     onRefresh() {
       setTimeout(() => {
         this.$toast("刷新成功");
         this.isLoading = false;
         this.getCategoryListContent();
-      }, 500);
+      }, 800);
+    },
+    radioOperate(radio) {
+      this.$store.commit("setRadioPopupShow", true);
+      this.$store.commit("setRadioObj", radio);
     },
     toPlayerPage(id) {
       this.$store.commit("setFullScreen", true);
       this.$store.commit("setMediaUrlId", id);
-      this.$store.commit("setPlayerList", this.categoryListContent);
+      let newlist = JSON.parse(JSON.stringify(this.categoryListContent)); //利用json转换深拷贝
+      this.$store.commit("setPlayerList", newlist);
     }
   }
 };
@@ -117,6 +122,7 @@ export default {
       padding-top: 0.2rem;
       .title {
         width: 100%;
+        line-height: 1.2;
         word-wrap: break-word;
         word-break: break-all;
         overflow: hidden;

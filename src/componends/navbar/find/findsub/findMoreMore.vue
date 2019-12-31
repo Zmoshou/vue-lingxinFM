@@ -2,49 +2,49 @@
   <div class="findMoreMore-container">
     <header>
       <span class="set-box">
-        <a href="#" class="iconfont icon-jiantou-px-" @click="toFind"></a>
+        <a href="#" class="iconfont icon-jiantou-px-" @click.prevent="toHome"></a>
       </span>
       <div class="nvabar">发现电台</div>
       <span class="serch-box">
-        <a href="#" class="serch iconfont icon-icon-test12"></a>
+        <a href="#" class="serch iconfont icon-icon-test12" @click.prevent="toSearch"></a>
       </span>
     </header>
     <!-- <div class="findMoreMore-box"> -->
-      <ul>
-        <van-list
-          v-model="loading"
-          :finished="finished"
-          finished-text="没有更多了"
-          loading-text="加载中"
-          @load="onLoad"
+    <ul>
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        loading-text="加载中"
+        @load="onLoad"
+      >
+        <li
+          class="item"
+          v-for="item in speakerList"
+          :key="item.id"
+          @click="toSpeakerDetial(item.id)"
         >
-          <li
-            class="item"
-            v-for="item in speakerList"
-            :key="item.id"
-            @click="getSpeakerDetial(item.id)"
-          >
-            <div class="photo">
-              <img :src="item.cover" alt />
-            </div>
-            <div class="content">
-              <p class="p_name">{{ item.title }}</p>
-              <p class="first_radio">
-                <span class="iconfont icon-icon-test19"></span>
-                &nbsp;&nbsp;{{item.content}}
-              </p>
-            </div>
-            <div class="goto iconfont icon-icon-test61"></div>
-          </li>
-        </van-list>
-      </ul>
+          <div class="photo">
+            <img :src="item.cover" alt />
+          </div>
+          <div class="content">
+            <p class="p_name">{{ item.title }}</p>
+            <p class="first_radio">
+              <span class="iconfont icon-icon-test19"></span>
+              &nbsp;&nbsp;{{item.content}}
+            </p>
+          </div>
+          <div class="goto iconfont icon-icon-test61"></div>
+        </li>
+      </van-list>
+    </ul>
     <!-- </div> -->
   </div>
 </template>
 
 <script>
 export default {
-  name:"findMoreMore",
+  name: "findMoreMore",
   data() {
     return {
       limit: 10,
@@ -87,16 +87,26 @@ export default {
         if (this.speakerList.length >= 343) {
           this.finished = true;
         }
-      }, 500);
+      }, 800);
     },
-    getSpeakerDetial(id) {
+    toSpeakerDetial(id) {
       this.$router.push({
         name: "RadioSpeakerDeyial",
         params: { id }
       });
     },
-    toFind() {
-      this.$router.push("/find");
+    toHome() {
+      this.$router.push({
+        name: "home"
+      });
+    },
+    // toSearch() {
+    //   this.$router.push("/fm/find/search");
+    // }
+    toSearch() {
+      this.$router.push({
+        name: "search"
+      });
     }
   }
 };
@@ -106,14 +116,10 @@ export default {
   padding: 2.2rem 0;
   position: relative;
   background-color: #fff;
-  // width: 100%;
   height: 100%;
   z-index: 15;
-  // .findMoreMore-box {
-  //   height: 100%;
-  //   overflow-y: auto;
-  //   padding: 2.2rem 0;
-  // }
+  box-sizing: border-box;
+  overflow-y: auto;
 
   header {
     position: fixed;
@@ -135,6 +141,7 @@ export default {
       justify-content: center;
       align-items: center;
       font-size: 0.75rem;
+      font-weight: 550;
     }
 
     .nvabar-my,

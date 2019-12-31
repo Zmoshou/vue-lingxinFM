@@ -39,10 +39,12 @@
               <span>{{ playerInfo.duration | timeFormat}}</span>
             </div>
             <div class="icon_box">
-              <div class="action">
-                <span class="iconfont icon-xinaixin1"></span>
-                <!-- <span class="iconfont icon-xinaixin"></span> -->
-                <span class="like_num">{{ playerInfo.sharenum }}</span>
+              <div class="action" @click="shouCang = !shouCang">
+                <span class="iconfont icon-xinaixin1" v-show="!shouCang"></span>
+                <transition name="shou_cang">
+                  <span class="iconfont icon-main_girl" style="color:#fa7963" v-show="shouCang"></span>
+                </transition>
+                <span class="like_num">{{ playerInfo.sharenum + Number(shouCang) }}</span>
               </div>
               <div class="action">
                 <span class="iconfont icon-xiazai"></span>
@@ -118,6 +120,7 @@
         <p class="hide_title">聆心FM,世界和我爱着你</p>
       </footer>
       <footer-popup ref="footerPopup"></footer-popup>
+      <radio-popup></radio-popup>
     </div>
     <audio ref="audio" @timeupdate="timeUpdate" @ended="audioEnd" autoplay></audio>
   </div>
@@ -126,6 +129,7 @@
 <script>
 import { mapGetters } from "vuex";
 import footerPopup from "./footer-popup.vue";
+import radioPopup from "./radioPopup.vue";
 export default {
   data() {
     return {
@@ -133,20 +137,31 @@ export default {
       songFlag: false, //节流阀解决鼠标控制进度条时 进度条还会随歌曲进度改变的问题
       barWidth: 0, //进度条的进度长
       cicleBar: 0, //小播放器圆圈的进度
-      touch: {}, //用来控制拖动进度条时间的对象
+      // touch: {}, //用来控制拖动进度条时间的对象
       currentTime: 0,
       playerInfo: {},
-      songReadey: false // 能否跳转下一曲
+      songReadey: false, // 能否跳转下一曲 还没使用
+      //------------
+      shouCang: false
     };
   },
   watch: {
     mediaUrlId: function(newVal, oldVal) {
+      console.log(newVal);
       if (newVal == -1) {
+        //播放列表清空时干的事
+        this.$refs.audio.src = "";
         return this.$toast("暂无播放歌曲");
       }
       if (newVal != oldVal) {
+        // this.barWidth = 0;
         this.getPlayer();
         this.$store.commit("setPlaying", false);
+        //设置列表中正在播放高亮的索引
+        let index = this.playerList.findIndex(ele => {
+          return ele.id === this.mediaUrlId;
+        });
+        this.$store.commit("setSelectIndex", index);
       }
     }
   },
@@ -252,8 +267,9 @@ export default {
     },
     //底部列表popUP显示
     changePopUPshow() {
+      this.$refs.footerPopup.popupShow = true;
       this.$nextTick(() => {
-        this.$refs.footerPopup.popupShow = true;
+        this.$refs.footerPopup.scrollInit();
       });
     },
     //上一首 下一首
@@ -296,7 +312,6 @@ export default {
     //随机radio
     randomRadio() {
       let randomIndex = Math.floor(Math.random() * this.playerList.length);
-      console.log(randomIndex);
       let nextId = this.playerList[randomIndex].id;
       this.$store.commit("setMediaUrlId", nextId);
     },
@@ -307,7 +322,8 @@ export default {
         return;
       }
       if (this.playerMode == 2) {
-        this.changeRadio(this.mediaUrlId, 0);
+        this.$refs.audio.currentTime = 0;
+        this.$refs.audio.play();
         return;
       }
       if (this.playerMode == 3) {
@@ -316,7 +332,8 @@ export default {
     }
   },
   components: {
-    footerPopup
+    footerPopup,
+    radioPopup
   }
 };
 </script>
@@ -401,7 +418,10 @@ export default {
         font-size: 0.625rem;
         color: #fff;
         text-align: center;
-        width: 100%;
+        width: 90%;
+        overflow: hidden;
+        white-space: nowrap;
+        margin: 0 auto;
         line-height: 1.6rem;
       }
       .speak {
@@ -462,20 +482,38 @@ export default {
       width: 100%;
       height: 5%;
       display: flex;
-      justify-content: space-around;
+      // justify-content: space-around;
       .action {
+        flex: 1;
+        position: relative;
         span {
+          position: absolute;
+          top: 0;
+          left: 50%;
           color: #fff;
           font-size: 0.875rem;
+          transform: translateX(-50%);
         }
         .like_num {
+          top: 28%;
+          left: 65%;
           font-size: 0.4rem;
+          transform: translateX(0%);
         }
         .message {
           font-size: 0.95rem;
         }
         .message_num {
+          top: 20%;
+          left: 65%;
           font-size: 0.4rem;
+          transform: translateX(0%);
+        }
+        .shou_cang-enter {
+          transform: translateX(-50%) scale(1.5);
+        }
+        .shou_cang-enter-active {
+          transition: transform 0.3s;
         }
       }
     }
@@ -544,6 +582,7 @@ export default {
     .smallTitle {
       position: relative;
       width: 100%;
+      line-height: 1.2;
       overflow: hidden;
       white-space: nowrap;
       font-size: 0.55rem;
@@ -564,7 +603,7 @@ export default {
   }
 }
 
-// 播发页面的进出动画
+// 播放页面的进出动画
 .playerPage-enter-active,
 .playerPage-leave-active {
   transition: all 0.3s ease;
@@ -574,7 +613,7 @@ export default {
   transform: translateY(50%) scale(0.2);
   opacity: 0;
 }
-//footer页面的进出动画
+//footer小播放器的进出动画
 .footer-enter-active {
   transition: all 0.7s ease;
 }

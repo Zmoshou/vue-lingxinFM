@@ -61,7 +61,7 @@ export default {
       });
     },
     back() {
-      this.$router.push("/fm/");
+      this.$router.push("/home");
     }
   }
 };
@@ -69,6 +69,7 @@ export default {
 
 <style lang="scss" scoped>
 .category-contaniner {
+  box-sizing: border-box;
   padding: 2.2rem 0;
   position: relative;
   height: 100%;

@@ -1,22 +1,33 @@
 import VueRouter from 'vue-router'
 
 import appCover from './componends/navbar/appCover.vue';
+import login from './componends/navbar/login.vue';
 
 import HomeContainer from './componends/navbar/home/home.vue'
-import MyContainer from './componends/navbar/my/my.vue'
-import FindContainer from './componends/navbar/find/find.vue'
-import XinLiFMContainer from './componends/navbar/xinliFM/fm.vue'
+// import MyContainer from './componends/navbar/my/my.vue'
+// import FindContainer from './componends/navbar/find/find.vue'
+// import XinLiFMContainer from './componends/navbar/xinliFM/fm.vue'
 
 import findMoreMore from './componends/navbar/find/findsub/findMoreMore.vue' //电台主播列表
 import radioSpeakerDeyial from './componends/navbar/find/findsub/radioSpeakerDetial.vue' //电台主播详情页面
 
 import category from './componends/navbar/xinliFM/category.vue' //节目分类页面
 import categoryChange from './componends/navbar/xinliFM/categoryList.vue'
+import communicationPart from './componends/navbar/xinliFM/communicationPart.vue' //交流社区页面
+import communicationDetails from './componends/navbar/xinliFM/communicationDetails.vue' //交流社区页面
+import communicationCompile from './componends/navbar/xinliFM/communicationCompile.vue' //交流社区发布页面
 
-import playerPage from './componends/navbar/xinliFM/playerPage.vue'
 import comment from './componends/navbar/xinliFM/playerPageComment.vue'
 
 import search from './componends/navbar/xinliFM/search.vue'
+import bodanContent from './componends/navbar/find/findsub/boDanContent.vue'
+import bodanList from './componends/navbar/find/findsub/boDanList.vue'
+
+//-------------------------这里是自己写的一个功能测试部分tabbarSwiper
+import test from './componends/my_plugin/myTabbarSwiper.vue'
+
+// const appCover =  () => import('./componends/navbar/appCover.vue')
+// 路由懒加载
 
 const router = new VueRouter({
   routes: [{
@@ -25,43 +36,16 @@ const router = new VueRouter({
     },
     {
       path: '/home',
+      name: "home",
       component: HomeContainer,
-      children: [{
-          // 当 /user/:id/profile 匹配成功，
-          // UserProfile 会被渲染在 User 的 <router-view> 中
-          path: '/my',
-          component: MyContainer
-        },
-        {
-          path: '/find',
-          component: FindContainer
-        },
-        {
-          path: '/fm',
-          component: XinLiFMContainer
-        }
-      ]
-    },
-    {
-      path: '/my',
-      component: MyContainer
-    },
-    {
-      path: '/find',
-      component: FindContainer
-    },
-    //find页面下的路由
-    {
-      path: '/find/findmore',
-      name: "findMoreMore",
-      component: findMoreMore,
       meta: {
         keepAlive: true //需要被缓存的组件
       },
-      // beforeEnter: (radioSpeakerDeyial, findMoreMore, next) => {
-      //   // ...
-      //   window.scroll(10, 0);
-      // }
+    },
+    {
+      path: '/find/findmore',
+      name: "findMoreMore",
+      component: findMoreMore
     },
     {
       path: '/find/radiospeakerdeyial/:id',
@@ -80,48 +64,53 @@ const router = new VueRouter({
       }]
     },
     {
-      path: '/fm/category/playerpage/:id',
-      component: playerPage,
-      name: "playerPage"
-    },
-    {
       path: '/fm/category/playerpage/comment/:id',
       component: comment,
       name: "comment"
     },
-     {
+    {
       path: '/fm/find/search',
       component: search,
       name: "search"
+    },
+    {
+      path: '/fm/communicationPart',
+      component: communicationPart,
+      name: "communicationPart"
+    },
+    {
+      path: '/fm/communicationPart/communicationCompile',
+      component: communicationCompile,
+      name: "communicationCompile"
+    },
+    {
+      path: '/fm/communicationPart/communicationDetails/:id',
+      component: communicationDetails,
+      name: "communicationDetails"
+    },
+    {
+      path: '/login',
+      component: login,
+      name: "login"
+    },
+    {
+      path: '/find/bodanlist',
+      component: bodanList,
+      name: "bodanList"
+    },
+    {
+      path: '/find/bodanlist/bodancontent',
+      component: bodanContent,
+      name: "bodanContent"
+    },
+    //-------------------------这里是自己写的一个功能测试部分tabbarSwiper
+    // import test from './componends/my_plugin/myTabbarSwiper.vue'
+    {
+      path: '/test',
+      component: test,
     }
   ],
-  linkActiveClass: 'router-link-active'
 })
-// 全局路由守卫
-// router.beforeEach((to, from, next) => {
-//   // to: Route: 即将要进入的目标 路由对象
-//   // from: Route: 当前导航正要离开的路由
-//   // next: Function: 一定要调用该方法来 resolve 这个钩子。执行效果依赖 next 方法的调用参数。
-//   // A跳转到B，B页面停留在A页面的滚动位置；解决方法：将scrollTop设置为0
-//   window.scroll(0, 0);
-//   // nextRoute: 设置需要路由守卫的路由集合
-//   const nextRoute = ['home', 'good-list', 'good-detail', 'cart', 'profile'];
-//   let isLogin = global.isLogin;  // 是否登录
-//   // 未登录状态；当路由到nextRoute指定页时，跳转至login
-//   if (nextRoute.indexOf(to.name) >= 0) {  
-//     if (!isLogin) {
-//       console.log('what fuck');
-//       router.push({ name: 'login' })
-//     }
-//   }
-//   // 已登录状态；当路由到login时，跳转至home 
-//   if (to.name === 'login') {
-//     if (isLogin) {
-//       router.push({ name: 'home' });
-//     }
-//   }
-//   next();
-// });
 
 
 export default router;

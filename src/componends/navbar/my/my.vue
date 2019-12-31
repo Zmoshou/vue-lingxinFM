@@ -3,9 +3,7 @@
     <div class="user_info">
       <div class="name_box">
         <div class="user_img">
-          <img
-            src="https://ossimg.xinli001.com/20180821/d4c1d4e2c60633961eb50c3d2b5e0b3f.jpeg!120x120"
-          />
+          <img src="../../../static/img/yinoduo.jpg" />
         </div>
         <div class="info">
           <p class="u_name">
@@ -44,14 +42,12 @@
       <div class="all_song">
         <span class="all_song_num">共30首</span>
         <p>
-          <span class=" iconfont icon-icon-test39"></span>
+          <span class="iconfont icon-icon-test39"></span>
           <span>多选</span>
         </p>
       </div>
     </div>
-    <div class="next">
-      
-    </div>
+    <div class="next"></div>
   </div>
 </template>
 

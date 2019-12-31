@@ -4,16 +4,10 @@
       <span class="set-box">
         <a href="#" class="iconfont icon-shezhi2"></a>
       </span>
-      <div class="nvabar" ref="navbarBox">
-        <router-link to="/my" class="nvabar-my">
-          <span class="my">我的</span>
-        </router-link>
-        <router-link to="/fm" class="nvabar-xinli_fm">
-          <span class="fm">聆心FM</span>
-        </router-link>
-        <router-link to="/find" class="nvabar-find">
-          <span class="find">发现</span>
-        </router-link>
+      <div class="nvabar">
+        <span :class="['my',{'active':select == 0}]" @click="toActive(0)">我的</span>
+        <span :class="['fm',{'active':select == 1}]" @click="toActive(1)">聆心FM</span>
+        <span :class="['find',{'active':select == 2}]" @click="toActive(2)">发现</span>
         <span class="undweline"></span>
       </div>
       <span class="serch-box">
@@ -26,9 +20,15 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      select: this.$store.state.swiperInitial
+    };
   },
   methods: {
+    toActive(num) {
+      this.select = num;
+      this.$parent.$refs.vanSwiper.swipeTo(num);
+    },
     toSearch() {
       this.$router.push({
         name: "search"
@@ -69,22 +69,21 @@ header {
     color: #000;
   }
 
-  .router-link-active {
+  .active {
+    transition: color 0.3s;
     color: #fa7963;
-    font-size: 0.875rem;
+    font-weight: 520;
   }
 
   .serch-box,
   .set-box {
     display: flex;
     align-items: center;
-    width: 3.125rem;
     a {
       margin-left: 0.3125rem;
       font-size: 0.875rem;
       color: black;
     }
-
     .serch {
       position: absolute;
       right: 0.3125rem;
