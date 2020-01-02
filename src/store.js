@@ -95,7 +95,13 @@ const store = new Vuex.Store({
     playerList: state => state.playerList,
     playerMode: state => state.playerMode,
     swiperInitial: state => state.swiperInitial,
-    selectIndex: state => state.selectIndex,
+    // selectIndex: state => state.selectIndex,
+    selectIndex(state) {
+      let index = state.playerList.findIndex((item, index) => {
+        return item.id === state.mediaUrlId;
+      })
+      return index;
+    }
   }
 
 })

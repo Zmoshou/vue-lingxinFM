@@ -94,8 +94,6 @@ export default {
       this.$store.commit("setMediaUrlId", radioId);
     },
     removeThisRadio(index) {
-      console.log(index);
-      console.log(this.selectIndex);
 
       if (index === this.selectIndex) {
         this.$parent.changeRadio(this.mediaUrlId, 1);
@@ -119,7 +117,6 @@ export default {
       let lightIndex = this.$store.state.playerList.findIndex(ele => {
         return ele.id == this.$store.state.mediaUrlId;
       });
-      this.$store.commit("setSelectIndex", lightIndex);
       this.scrollInit();
     },
     scrollInit() {

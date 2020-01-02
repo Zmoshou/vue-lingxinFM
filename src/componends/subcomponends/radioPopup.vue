@@ -98,10 +98,10 @@ export default {
             let nextIndex = radioIndex > index ? index + 1 : index;
             this.$store.state.playerList.splice(nextIndex, 0, raido);
             //重新设置当前高亮索引
-            let lightIndex = this.$store.state.playerList.findIndex(ele => {
-              return ele.id == this.$store.state.mediaUrlId;
-            });
-            this.$store.commit("setSelectIndex", lightIndex);
+            // let lightIndex = this.$store.state.playerList.findIndex(ele => {
+            //   return ele.id == this.$store.state.mediaUrlId;
+            // });
+            // this.$store.commit("setSelectIndex", lightIndex);
           }
         } else {
           //如果不在列表中 就加入列表中
