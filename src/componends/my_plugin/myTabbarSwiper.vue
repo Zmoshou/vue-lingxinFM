@@ -172,6 +172,7 @@ export default {
 <style lang="scss" scoped>
 .divclass {
   margin: 0.5rem;
+  font-size: 0.6rem;
   background-color: skyblue;
   height: 300px;
 }
@@ -192,6 +193,7 @@ export default {
     }
   }
   .tabbar_item {
+    font-size: 0.6rem;
     padding: 0 5px;
   }
   .tabbar_line {
