@@ -104,7 +104,7 @@ export default {
     background: #fff;
     position: fixed;
     z-index: 10;
-    top: 1.8rem;
+    top: 2.2rem;
     padding-left: 0.75rem;
     color: #fa7963;
     border-bottom: 1px solid #f7f7f7;

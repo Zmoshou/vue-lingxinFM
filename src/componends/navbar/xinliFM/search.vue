@@ -104,7 +104,7 @@ export default {
       top: 0.75rem;
       left: 0.325rem;
       width: 85%;
-      height: 1rem;
+      height: 1.25rem;
       border-radius: 15px;
       background-color: #f7f7f7;
       color: #cecece;

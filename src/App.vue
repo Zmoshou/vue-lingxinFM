@@ -3,7 +3,7 @@
     <transition :name="direction" mode="out-in">
       <router-view class="appView"></router-view>
     </transition>
-    <footerplayer></footerplayer>
+    <footerplayer v-show="hideshow"></footerplayer>
   </div>
 </template>
 
@@ -13,12 +13,33 @@ export default {
   name: "App",
   data: () => ({
     direction: "slide-right",
-    appOverflow: true
+    appOverflow: true,
+    docmHeight: document.documentElement.clientHeight, //默认屏幕高度
+    showHeight: document.documentElement.clientHeight, //实时屏幕高度
+    hideshow: true //显示或者隐藏footer
   }),
+
+  mounted() {
+    // window.onresize监听页面高度的变化
+    window.onresize = () => {
+      return (() => {
+        this.showHeight = document.body.clientHeight;
+      })();
+    };
+  },
+
   components: {
     footerplayer
   },
   watch: {
+    showHeight: function() {
+      if (this.docmHeight > this.showHeight) {
+        this.hideshow = false;
+      } else {
+        this.hideshow = true;
+      }
+    },
+
     $route(to, from) {
       if (to.name == "comment") {
         this.direction = "comment";
@@ -46,24 +67,35 @@ export default {
     display: none;
     width: 0;
   }
-  transition: all 0.35s ease-out;
+  transition: all 0.35s ease;
 }
+
+// .slide-left-enter,
+// .slide-right-leave-active {
+//   -webkit-transform: translate(100%, 0);
+//   transform: translate(100%, 0);
+//    /*当左滑进入右滑进入过渡动画*/
+// }
+
+// .slide-left-leave-active,
+// .slide-right-enter {
+//   -webkit-transform: translate(-100%, 0);
+//   transform: translate(-100%, 0);
+// }
+
 .slide-left-enter {
-  // transform: translate(0%, 0);
-  transform: translate(50%, 0);
+  transform: translate(0%, 0);
 }
 .slide-left-leave-active {
   transform: translate(-100%, 0);
-  // transform: translate(0%, 0);
 }
 .slide-right-enter {
-  // transform: translate(0%, 0);
-  transform: translate(-50%, 0);
+  transform: translate(-0%, 0);
 }
 .slide-right-leave-active {
   transform: translate(100%, 0);
-  // transform: translate(100%, 0);
 }
+
 .comment-enter {
   transform: translate(100%, 0);
 }
