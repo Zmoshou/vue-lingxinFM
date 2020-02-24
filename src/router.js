@@ -4,9 +4,6 @@ import appCover from './componends/navbar/appCover.vue';
 import login from './componends/navbar/login.vue';
 
 import HomeContainer from './componends/navbar/home/home.vue'
-// import MyContainer from './componends/navbar/my/my.vue'
-// import FindContainer from './componends/navbar/find/find.vue'
-// import XinLiFMContainer from './componends/navbar/xinliFM/fm.vue'
 
 import findMoreMore from './componends/navbar/find/findsub/findMoreMore.vue' //电台主播列表
 import radioSpeakerDeyial from './componends/navbar/find/findsub/radioSpeakerDetial.vue' //电台主播详情页面

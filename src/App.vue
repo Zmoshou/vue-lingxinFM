@@ -70,19 +70,6 @@ export default {
   transition: all 0.35s ease;
 }
 
-// .slide-left-enter,
-// .slide-right-leave-active {
-//   -webkit-transform: translate(100%, 0);
-//   transform: translate(100%, 0);
-//    /*当左滑进入右滑进入过渡动画*/
-// }
-
-// .slide-left-leave-active,
-// .slide-right-enter {
-//   -webkit-transform: translate(-100%, 0);
-//   transform: translate(-100%, 0);
-// }
-
 .slide-left-enter {
   transform: translate(0%, 0);
 }
